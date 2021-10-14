@@ -1,0 +1,7 @@
+# Cache files
+__pycache__/
+.vscode/
+# Neighborhood matrix
+matrix/
+# predicted scribbles
+scribble/
