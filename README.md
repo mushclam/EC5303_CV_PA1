@@ -13,6 +13,13 @@
 6. `metric.py` IoU score를 계산하는 함수
 7. `utils.py` 기타 코드 작동에 부가적으로 필요한 편의성 함수
 
+## Installation
+
+```bash
+# In virtual environment
+pip install -r requirement.txt
+```
+
 ## Usage
 
 ```
