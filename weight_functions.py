@@ -10,7 +10,7 @@ def weight_func2(r, s, mean, var):
     w = 1 + (r.astype(np.int32) - mean)*(s.astype(np.int32) - mean)/var
     return w / np.sum(w)
 
-def laplacian(r_coord, r, s_coord, s):
+def laplacian_of_gaussian(r_coord, r, s_coord, s):
     x_r, y_r = r_coord
 
     g = r.astype(np.int32) - s.astype(np.int32)
