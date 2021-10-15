@@ -10,7 +10,8 @@
 3. `least_square_solution.py` least-square solver와 관련된 함수
 4. `graph_cut.py` graph-cut에 관련된 함수
 5. `weight_functions.py` 계산에 사용되는 weight functions을 포괄
-6. `utils.py` 기타 코드 작동에 부가적으로 필요한 편의성 함수
+6. `metric.py` IoU score를 계산하는 함수
+7. `utils.py` 기타 코드 작동에 부가적으로 필요한 편의성 함수
 
 ## Usage
 

@@ -59,12 +59,12 @@ def graph_cut(input_image, scribble, matrix, n_label, n_modal):
     ).transpose(1, 0).copy("C").astype(np.int32)
 
     # test for neigborhood matrix
-    # total_cost = total_cost.transpose(1, 2, 0)
-    # total_cost = total_cost.reshape(-1, n_label)
-    # identity_matrix = sparse.eye(matrix.shape[0])
-    # matrix = identity_matrix + matrix
-    # total_cost = matrix @ total_cost
-    # total_cost = total_cost.reshape(width, height, n_label).copy("C").astype(np.int32)
+    total_cost = total_cost.transpose(1, 2, 0)
+    total_cost = total_cost.reshape(-1, n_label)
+    identity_matrix = sparse.eye(matrix.shape[0])
+    matrix = identity_matrix + matrix
+    total_cost = matrix @ total_cost
+    total_cost = total_cost.reshape(width, height, n_label).copy("C").astype(np.int32)
 
     # graph-cut
     if n_label == 2:
@@ -74,6 +74,4 @@ def graph_cut(input_image, scribble, matrix, n_label, n_modal):
         pairwise = 5 * np.abs(x - y).astype(np.int32).copy("C")
 
     result = cut_simple(total_cost, pairwise)
-    # result = cut_from_graph(edges, total_cost.reshape(-1, n_label),
-    #                         pairwise).reshape(input_image.shape[1], input_image.shape[2])
     return result[np.newaxis, :, :]

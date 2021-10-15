@@ -12,6 +12,12 @@ def neighborhood_weight(image, threshold, wf):
     col_indices = []
     data = []
 
+    # degree matrix
+    if wf == 'laplacian':
+        d_row = []
+        d_col = []
+        d_data = []
+
     # Calculate weights of neighborhoods
     n_indices = get_neighbor_indices(threshold)
     for i, row in tqdm(enumerate(image), desc='Neighbor Matrix'):
@@ -26,29 +32,43 @@ def neighborhood_weight(image, threshold, wf):
             s = np.array([image[x, y] for (x, y) in n])
             neighbor_indices = np.array([x*col_length+y for (x, y) in n])
 
-            if wf == 'w1' or wf == 'w2':
-                mean = np.mean(s)
-                var = np.var(s)
-                if var == 0:
-                    w = np.ones_like(s) / len(s)
+            mean = np.mean(s)
+            var = np.var(s)
+            if var == 0:
+                w = np.ones_like(s) / len(s)
+            else:
+                if wf == 'w1':
+                    w = weight_func1(r, s, var)
+                elif wf == 'w2':
+                    w = weight_func2(r, s, mean, var)
                 else:
-                    if wf == 'w1':
-                        w = weight_func1(r, s, var)
-                    else:
-                        w = weight_func2(r, s, mean, var)
-            elif wf == 'laplacian':
-                w = laplacian((i, j), r, n, s)
+                    w = weight_func1(r, s, var)
+
+            if wf == 'laplacian':
+                d_row.append(center_index)
+                d_col.append(center_index)
+                d_data.append(len(n))        
 
             for index, e in enumerate(neighbor_indices):
                 row_indices.append(center_index)
                 col_indices.append(e)
                 data.append(w[index])
 
-    # Generate neighborhood matrix
-    return sparse.coo_matrix(
+    result = sparse.coo_matrix(
         (data, (row_indices, col_indices)),
         shape=(size, size)
     )
+
+    # Generate laplacian matrix
+    if wf == 'laplacian':
+        degree = sparse.coo_matrix(
+            (d_data, (d_row, d_col)),
+            shape=(size, size)
+        )
+        result = degree - result
+
+    # Generate neighborhood matrix
+    return result.tocoo()
 
 
 def get_neighbor_indices(threshold):

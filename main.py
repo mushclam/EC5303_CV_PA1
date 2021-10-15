@@ -26,12 +26,12 @@ def init_argument():
     parser.add_argument('--gpu', '-g', type=int, default=0)
 
     parser.add_argument('--n_label', '-nl', type=int, default=2, choices=[2, 7])
-    parser.add_argument('--method', '-m', type=str, default='graph-cut', choices=['lstsq', 'graph-cut'])
-    parser.add_argument('--operator', '-o', type=str, default='none', choices=['none', 'lsqr', 'lsmr'])
-    parser.add_argument('--threshold', '-t', type=float, default=8)
-    parser.add_argument('--precision', '-p', type=float, default=1e-4)
-    parser.add_argument('--n_modal', '-nm', type=int, default=6)
-    parser.add_argument('--weight-function', '-wf', type=str, default='w1', choices=['w1', 'w2', 'laplacian'])
+    parser.add_argument('--method', '-m', type=str, default='lstsq', choices=['lstsq', 'graph-cut'])
+    parser.add_argument('--operator', '-o', type=str, default='lsqr', choices=['none', 'lsqr', 'lsmr'])
+    parser.add_argument('--threshold', '-t', type=float, default=16)
+    parser.add_argument('--precision', '-p', type=float, default=0)
+    parser.add_argument('--n_modal', '-nm', type=int, default=1)
+    parser.add_argument('--weight-function', '-wf', type=str, default='laplacian', choices=['w1', 'w2', 'laplacian'])
 
     if is_notebook():
         args = parser.parse_args(args=[])
@@ -95,7 +95,10 @@ def main():
         # Generate and save scribble
         if method == 'lstsq':
             # Least-Square Solution
-            predicted = least_square_solution(args.operator, scribble_image, matrix, precision)
+            predicted = least_square_solution(
+                args.operator, scribble_image, matrix,
+                precision, weight_function
+            )
         elif method == 'graph-cut':
             # load input image
             input_image = io.imread('data/Emily-In-Paris-gray.png')
