@@ -54,9 +54,9 @@ def graph_cut(input_image, scribble, matrix, n_label, n_modal):
             total_cost.append(c)
         total_cost = np.array(total_cost)
 
-    edges = np.array(
-        [matrix.row, matrix.col, matrix.data]
-    ).transpose(1, 0).copy("C").astype(np.int32)
+    # edges = np.array(
+    #     [matrix.row, matrix.col, matrix.data]
+    # ).transpose(1, 0).copy("C").astype(np.int32)
 
     # test for neigborhood matrix
     total_cost = total_cost.transpose(1, 2, 0)

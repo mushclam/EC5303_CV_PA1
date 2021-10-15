@@ -7,13 +7,13 @@ from scipy.sparse import linalg
 import os
 import pickle
 
-def least_square_solution(operator, scribble, matrix, precision, wf):
+def least_square_solution(operator, scribble, matrix, precision, args):
     # Original Shape
     width, height = scribble.shape[:2]
     # Matrix pre-processing
     if not isinstance(matrix, sparse.csr_matrix):
         matrix = sparse.csr_matrix(matrix)
-    if wf != 'laplacian':
+    if args.weight_function != 'laplacian':
         identity_matrix = sparse.eye(matrix.shape[0])
         matrix = identity_matrix - matrix
     
@@ -29,7 +29,7 @@ def least_square_solution(operator, scribble, matrix, precision, wf):
     for i, s in tqdm(enumerate(scribbles), desc='Least Square Solution'):
         print('\n[Update neighborhood matrix to fit with scribble]')
         # Generate and save reconstructed matrix that need many time
-        tmp_f_name = f'tmp/tmp_{operator}_t16_lap_l2_{i}_mat.pkl'
+        tmp_f_name = f'tmp/tmp_{operator}_t{args.threshold}_{args.weight_function}_l{args.n_label}_{i}_mat.pkl'
         if os.path.exists(tmp_f_name):
             with open(tmp_f_name, 'rb') as f:
                 s_matrix = pickle.load(f)
